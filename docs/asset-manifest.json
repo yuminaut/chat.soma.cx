@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/static/css/main.110a10e8.css",
-    "main.js": "/static/js/main.61f8dee8.js",
+    "main.js": "/static/js/main.899ee6a4.js",
     "static/js/27.db087d70.chunk.js": "/static/js/27.db087d70.chunk.js",
     "static/media/Avenir.ttf": "/static/media/Avenir.b58b1b9c574d4cabb0ab.ttf",
     "index.html": "/index.html"
   },
   "entrypoints": [
     "static/css/main.110a10e8.css",
-    "static/js/main.61f8dee8.js"
+    "static/js/main.899ee6a4.js"
   ]
 }

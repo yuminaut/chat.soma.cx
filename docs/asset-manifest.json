@@ -1,13 +1,19 @@
 {
   "files": {
-    "main.css": "/static/css/main.80199b80.css",
-    "main.js": "/static/js/main.eb0d064e.js",
-    "static/js/27.090358ed.chunk.js": "/static/js/27.090358ed.chunk.js",
+    "main.css": "/static/css/main.b76b880d.css",
+    "main.js": "/static/js/main.eb7bd8e6.js",
+    "static/js/27.db087d70.chunk.js": "/static/js/27.db087d70.chunk.js",
+    "static/media/Simple-Line-Icons.svg?v=2.4.0": "/static/media/Simple-Line-Icons.809e55bbb1903c630920.svg",
+    "static/media/Simple-Line-Icons.woff?v=2.4.0": "/static/media/Simple-Line-Icons.5c9febce52054ae0b96d.woff",
+    "static/media/Simple-Line-Icons.eot?v=2.4.0": "/static/media/Simple-Line-Icons.85e8c542d5e137beecf9.eot",
+    "static/media/Simple-Line-Icons.ttf?v=2.4.0": "/static/media/Simple-Line-Icons.3ec13a24af3fdda11107.ttf",
     "static/media/Avenir.ttf": "/static/media/Avenir.b58b1b9c574d4cabb0ab.ttf",
+    "static/media/Simple-Line-Icons.woff2?v=2.4.0": "/static/media/Simple-Line-Icons.3826fa1cb2348dd93948.woff2",
+    "static/media/ding.m4a": "/static/media/ding.9a3f31bd0a9331d8de5b.m4a",
     "index.html": "/index.html"
   },
   "entrypoints": [
-    "static/css/main.80199b80.css",
-    "static/js/main.eb0d064e.js"
+    "static/css/main.b76b880d.css",
+    "static/js/main.eb7bd8e6.js"
   ]
 }

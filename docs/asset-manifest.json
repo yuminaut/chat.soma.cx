@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/static/css/main.b76b880d.css",
-    "main.js": "/static/js/main.eb7bd8e6.js",
+    "main.js": "/static/js/main.41e5cf7c.js",
     "static/js/27.db087d70.chunk.js": "/static/js/27.db087d70.chunk.js",
     "static/media/Simple-Line-Icons.svg?v=2.4.0": "/static/media/Simple-Line-Icons.809e55bbb1903c630920.svg",
     "static/media/Simple-Line-Icons.woff?v=2.4.0": "/static/media/Simple-Line-Icons.5c9febce52054ae0b96d.woff",
@@ -14,6 +14,6 @@
   },
   "entrypoints": [
     "static/css/main.b76b880d.css",
-    "static/js/main.eb7bd8e6.js"
+    "static/js/main.41e5cf7c.js"
   ]
 }

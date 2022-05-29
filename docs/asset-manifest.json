@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/static/css/main.5a46222a.css",
-    "main.js": "/static/js/main.10e7c21c.js",
+    "main.css": "/static/css/main.ddebe877.css",
+    "main.js": "/static/js/main.784eba8b.js",
     "static/js/27.db087d70.chunk.js": "/static/js/27.db087d70.chunk.js",
     "static/media/Simple-Line-Icons.svg?v=2.4.0": "/static/media/Simple-Line-Icons.809e55bbb1903c630920.svg",
     "static/media/Simple-Line-Icons.woff?v=2.4.0": "/static/media/Simple-Line-Icons.5c9febce52054ae0b96d.woff",
@@ -13,7 +13,7 @@
     "index.html": "/index.html"
   },
   "entrypoints": [
-    "static/css/main.5a46222a.css",
-    "static/js/main.10e7c21c.js"
+    "static/css/main.ddebe877.css",
+    "static/js/main.784eba8b.js"
   ]
 }

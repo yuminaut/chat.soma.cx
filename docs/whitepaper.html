@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" media="print" href="style.css" />
+    <title>SomaChat: an Experimental Real-Time Chat</title>
+    <style>
+      p {
+        text-align: justify;
+      }
+    </style>
+  </head>
+  <body>
+    <h1 id="somachat">SomaChat: an Experimental Real-Time Chat</h1>
+
+    <div class="info">
+      chat@soma.cx <br />
+      <a href="https://soma.cx" rel="noopener noreferrer nofollow" target="_blank">www.soma.cx</a>
+      <br />
+      Jul 28, 2022
+    </div>
+
+    <h3 id="table-of-contents">Table of contents</h3>
+    <ul>
+      <li><a href="#1-introduction">1. Introduction</a></li>
+      <li><a href="#2-motivation">2. Motivation</a></li>
+      <li><a href="#3-real-time-text-in-somachat">3. Real-time text in SomaChat</a></li>
+      <li>
+        <a href="#4-notable-features">4. Notable features</a>
+        <!-- <ul>
+          <li>
+            <a href="#4-1-authentication">4.1. Authentication</a>
+            <ul>
+              <li>
+                <a href="#4-1-1-pseudo-authentication-via-tripcodes">4.1.1. Pseudo-authentication via tripcodes</a>
+              </li>
+              <li>
+                <a href="#4-1-2-alternatives-to-the-tripcode-scheme">4.1.2. Alternatives to the tripcode scheme</a>
+              </li>
+              <li>
+                <a href="#4-1-3-crypto-wallets-for-decentralized-trustless-authentication"
+                  >4.1.3. Crypto wallets for decentralized trustless authentication</a
+                >
+              </li>
+              <li><a href="#4-1-4-deniable-authentication">4.1.4. Deniable authentication</a></li>
+            </ul>
+          </li>
+          <li><a href="#4-2-end-to-end-encryption">4.2. End-to-end encryption</a></li>
+          <li>
+            <a href="#4-3-chatrooms">4.3. Chatrooms</a>
+            <ul>
+              <li><a href="#4-3-1-public-chatrooms">4.3.1. Public chatrooms</a></li>
+              <li><a href="#4-3-2-password-protected-chatrooms">4.3.2. Password-protected chatrooms</a></li>
+              <li><a href="#4-3-3-invite-only-chatrooms">4.3.3. Invite-only chatrooms</a></li>
+            </ul>
+          </li>
+          <li><a href="#4-4-direct-messages">4.4. Direct messages</a></li>
+        </ul> -->
+      </li>
+    </ul>
+
+    <!-- <p class="abstract">This document outlines the goals, features and inner workings of SomaChat.</p> -->
+
+    <h2 id="1-introduction">1. Introduction</h2>
+    <p>
+      SomaChat is an experimental chat software that implements real-time text communcation, a mode of textual
+      conversation wherein text is transmitted instantly to participants as it is being typed; this mimics voiced
+      conversation in an effective way, making it a more direct and personal type of text-based interaction.
+    </p>
+    <p>This document describes and discusses goals, features and technical aspects of SomaChat.</p>
+    <h2 id="2-motivation">2. Motivation</h2>
+    <p>
+      In a conventional instant messaging application, conversation functions the same way a letter exchange does – a
+      message is composed in its entirety before it is sent to its recipient. Instant messaging is intended to mimic
+      natural conversation, but fails to effectively do so for at least two reasons:
+    </p>
+    <ol>
+      <li>
+        Low exchange rate – participants have to wait for a message to be composed and sent before they can start
+        reading and interpreting it, let alone reply to it.
+      </li>
+      <li>
+        Poor synchronization – it often happens that participants &quot;speak past&quot; each other and thus
+        accidentally split the conversation into two, ending up in a situation where they maintain two conversation with
+        each other at the same time.
+      </li>
+    </ol>
+    <p>
+      Natural conversation however, happening face-to-face or over the phone, is perfectly continuous in the way content
+      is delivered; as one party speaks, a listener can interpret the words and prepare a reply, and even interrupt the
+      speaker should they wish to.
+    </p>
+    <p>
+      A messaging protocol that lets participiants talk in a way that is more akin to natural conversation than letter
+      exchange would disperse with the issues explained above, making online communication more direct and efficient.
+    </p>
+    <h2 id="3-real-time-text-in-somachat">3. Real-time text in SomaChat</h2>
+    <p>
+      A well-implemented real-time text communication application should let participiants talk in a way that is more
+      akin to natural conversation than letter exchange. In SomaChat this is achieved in the following way:
+    </p>
+    <ul>
+      <li>
+        When a user starts typing, their unfinished message is appended to each user&#39;s chat log along with an
+        indicator that shows that the message is under construction.
+      </li>
+      <li>
+        Every keystroke, including backspace or pasting/deletion of multiple letters, results in the new version of the
+        message replacing the old version in the chat log.
+      </li>
+      <li>
+        When a message is finished and submitted, the &quot;active message&quot; indicator in the chat log is updated to
+        reflect that the message is finalized.
+      </li>
+      <li>If a message in progress is deleted instead of sent, it it removed from the chat log.</li>
+    </ul>
+    <p>
+      This protocol effectively mimics natural conversation and, thanks to the ability to remove letters and entire
+      messages in progress, allows for short non-intrusive textual interjections that mimic body language and facial
+      expressions, such as &quot;nodding along&quot; to show that one is actively listening, without cluttering the chat
+      log.
+    </p>
+    <p>
+      Finally, the protocol eliminates issues inherent to conventional instant messaging by increasing the exchange rate
+      between users and as such improving their synchronization.
+    </p>
+    <h2 id="4-notable-features">4. Notable features</h2>
+    <p>
+      The core of SomaChat is the real-time aspect – everything else is auxiliary. However: presentation, performance
+      and user experience matter, which is why significant effort has been spent on making the software as fast,
+      scalable and intuitive as possible while at the same time making use of modern cryptographic protocols in order to
+      allow for secure and authenticated conversation.
+    </p>
+    <h3 id="4-1-authentication">4.1. Authentication</h3>
+    <p><em>Authentication</em> means plausibly proving that one is who one claims to be.</p>
+    <p>
+      Initially SomaChat only allowed for pseudo-authentication via tripcodes [1], an authentication scheme commonly
+      used on imageboards in which a user is identified by her tripcode. SomaChat has since been extended with deniable
+      authentication [2] (see section 4.1.4) by leveraging the Ethereum [3] network as a decentralized public-key
+      infrastructure [4], using crypto wallet software for identity and key management [5,6], and designing and
+      implementing a protocol that lets a user deniably authenticate herself to, and communicate with, other users [7].
+    </p>
+    <p>This section explains and discusses the means of authentication outlined above.</p>
+    <ul>
+      <li>
+        [1]&nbsp;<a href="https://en.wikipedia.org/wiki/Imageboard#Tripcodes"
+          >https://en.wikipedia.org/wiki/Imageboard#Tripcodes</a
+        >
+      </li>
+      <li>
+        [2]&nbsp;<a href="https://en.wikipedia.org/wiki/Deniable_authentication"
+          >https://en.wikipedia.org/wiki/Deniable_authentication</a
+        >
+      </li>
+      <li>[3]&nbsp;<a href="https://ethereum.org/">https://ethereum.org/</a></li>
+      <li>
+        [4]&nbsp;<a href="https://en.wikipedia.org/wiki/Public_key_infrastructure"
+          >https://en.wikipedia.org/wiki/Public_key_infrastructure</a
+        >
+      </li>
+      <li>
+        [5]&nbsp;A crypto wallet is a browser extension and/or an app that manages a user&#39;s public and private keys,
+        which are used for signing and receiving data on a decentralized blockchain/network, such as Ethereum.
+      </li>
+      <li>[6]&nbsp;MetaMask is recommended due to its ubiquity and active development.</li>
+      <li>
+        [7]&nbsp;<a href="ske.html"><em>The SomaChat Key Exchange Protocol</em></a>
+      </li>
+    </ul>
+    <h4 id="4-1-1-pseudo-authentication-via-tripcodes">4.1.1. Pseudo-authentication via tripcodes</h4>
+    <p>
+      A tripcode is a string of letters generated by the server from a user-provided secret [8] via the use of a
+      cryptographic one-way function [9,10] and then appended to the message to act as a signature proving the
+      sender&#39;s identity.
+    </p>
+    <p>
+      While a tripcode-based authentication scheme is trivial to implement and easy to use, there are a number of
+      fundamental issues with it:
+    </p>
+    <ol>
+      <li>
+        It places an undesirable amount of trust in the chat server – as the secrets used to generate tripcodes are
+        fully readable by the server, a malicious server could steal and reuse secrets in order to impersonate users.
+      </li>
+      <li>
+        Two users who happen to choose the same secret will generate the same tripcode, breaking the expectation that
+        one tripcode represents one person.
+      </li>
+      <li>
+        Due to the surjective (many-to-one) nature of cryptographic hash functions, and especially considering that a
+        tripcode is a hash function output that has been truncated and transformed for memorability purposes, there
+        exists a risk, though small, of tripcode collision, meaning that several secrets would generate the same
+        tripcode, once again breaking the intuitively arrived upon expectation of uniqueness.
+      </li>
+    </ol>
+    <p>
+      Despite these issues, tripcodes suffice for many use cases – specifically those wherein a user wishes to maintain
+      a consistent identity between sessions without caring much about whether she later gets misrepresented or
+      impersonated.
+    </p>
+    <ul>
+      <li>[8]&nbsp;Though somewhat incorrect, one may think of it as a password.</li>
+      <li>
+        [9]&nbsp;<a href="https://en.wikipedia.org/wiki/One-way_function"
+          >https://en.wikipedia.org/wiki/One-way_function</a
+        >
+      </li>
+      <li>
+        [10]&nbsp;<a href="https://en.wikipedia.org/wiki/Cryptographic_hash_function"
+          >https://en.wikipedia.org/wiki/Cryptographic_hash_function</a
+        >
+      </li>
+    </ul>
+    <h4 id="4-1-2-alternatives-to-the-tripcode-scheme">4.1.2. Alternatives to the tripcode scheme</h4>
+    <p>
+      Due to the glaring issues with tripcodes, most notably the security risk that comes with needing to trust the
+      server, one might want to look into alternative ways to perform user authentication, preferably in a way that is
+      not dependent on users having to share private information (secrets, passwords, private keys).
+    </p>
+    <p>
+      An authentication scheme based on a public key infrastructure is a step toward this end. One may implement server
+      side management of public keys in order to allow for such an infrastructure to be created. However along with this
+      comes the problem of how to manage private keys:
+    </p>
+    <ol>
+      <li>As the chat client runs in the browser, its authenticity is difficult to verify [11].</li>
+      <li>The user is forced to trust that the client will not steal her private keys.</li>
+    </ol>
+    <p>
+      Fortunately there exists a robust solution that can be leveraged for a near trustless public key infrastructure
+      and private key management: Ethereum and crypto wallets [3-6], respectively.
+    </p>
+    <ul>
+      <li>
+        [11]&nbsp;<a href="https://github.com/signalapp/Signal-Desktop/issues/4466"
+          >https://github.com/signalapp/Signal-Desktop/issues/4466</a
+        >
+      </li>
+    </ul>
+    <h4 id="4-1-3-crypto-wallets-for-decentralized-trustless-authentication">
+      4.1.3. Crypto wallets for decentralized trustless authentication
+    </h4>
+    <p>
+      A crypto wallet, such as MetaMask, lets a user operating a web-based client manually sign [12] a piece of data
+      with a private key without the client ever gaining access to the private key itself, since the action of signing
+      the data is performed completely within the confines of the crypto wallet software; what this means is that a
+      malicious client cannot steal the private key as the only data to enter the crypto wallet is the data to be signed
+      and the only data to leave it is the data&#39;s cryptographic signature.
+    </p>
+    <p>
+      This makes a crypto-wallet-as-browser-extension a perfect candidate for web-based trustless authentication as it
+      enables a scheme wherein a participant signs a message once per session and is thereafter able to communicate in
+      an authenticated way according to the protocol implemented by the chat client.
+    </p>
+    <ul>
+      <li>
+        [12]&nbsp;Signing proves authenticity; data can be <em>signed</em> with a private key, known only by the signer,
+        and <em>verified</em> with a public key, known by everyone.
+      </li>
+    </ul>
+    <h4 id="4-1-4-deniable-authentication">4.1.4. Deniable authentication</h4>
+    <p>Face-to-face conversation has two interesting properties:</p>
+    <ol>
+      <li>
+        <strong>Authentication:</strong> as a listener, one implicitly knows that the words one hears are indeed being
+        spoken by the speaker – this is confirmed visually and via recognition of voice – via presence.
+      </li>
+      <li>
+        <strong>Deniability:</strong> it is not possible to prove afterward to a third party what the speaker said by
+        relaying the words; even if one recorded the conversation (e.g. on tape), the speaker could claim that the
+        recording is a forgery.
+      </li>
+    </ol>
+    <p>
+      These two properties together form what is called <em>deniable authentication</em>; participants in a conversation
+      can be sure who they are conversing with, but neither can prove afterward what was said or who said what.
+    </p>
+    <p>
+      Deniable authentication can be implemented for online communication by having each pair of participants agree upon
+      a <em>shared secret</em>, a symmetric encryption [13] key beknownst only to them, which is used by each party to
+      encrypt and exchange their public key corresponding to the private key used for signing messages [12]. Since both
+      parties know the encryption key, one could forge an encrypted signing key exchange from the other party and then
+      send messages to oneself in the other party&#39;s name. This <em>forgeability</em> aspect is what lends the
+      communication deniability.
+    </p>
+    <p>
+      For group messaging, the pairwise secret key exchange may be performed for each pair of participants in the group.
+      Due to the pairwise uniqueness of the shared secrets, it is not possible to successfully forge messages in another
+      party&#39;s name, as that party would have a <em>different</em> shared key with another, third, party.
+    </p>
+    <p>
+      SomaChat achieves deniable authentication via a custom protocol, described in [7]. To initiate a pairwise key
+      exchange and thus a deniably authenticated session, a user first generates two keypairs: the first one she
+      manually signs via a crypto wallet browser extension (such as MetaMask) allowing it to be used as an ephemeral
+      authentication key; the second one remains unsigned but is exchanged pairwise with each connected user in a
+      deniable fashion via a Diffie-Hellman key exchange [14].
+    </p>
+    <ul>
+      <li>
+        [13]&nbsp;<a href="https://en.wikipedia.org/wiki/Symmetric-key_algorithm"
+          >https://en.wikipedia.org/wiki/Symmetric-key_algorithm</a
+        >
+      </li>
+      <li>
+        [14]&nbsp;<a href="https://en.wikipedia.org/wiki/Diffie%E2%80%93Hellman_key_exchange"
+          >https://en.wikipedia.org/wiki/Diffie%E2%80%93Hellman_key_exchange</a
+        >
+      </li>
+    </ul>
+    <h3 id="4-2-end-to-end-encryption">4.2. End-to-end encryption</h3>
+    <p><em>To be implemented.</em></p>
+    <p>
+      End-to-end encryption (E2EE) is the scheme in which messages are encrypted sender-side and decrypted
+      receiver-side, preventing the chat server to read the contents of the messages.
+    </p>
+    <p>
+      In combination with the modified X3DH protocol alluded to in the previous section, an encryption scheme such as
+      the <em>Double Ratchet</em> algorithm or another sufficiently secure encryption scheme can provide end-to-end
+      encrypted deniably authenticated communication not necessitated upon server trust, making it a highly desirable
+      feature for direct messaging or private group messaging.
+    </p>
+    <h3 id="4-3-chatrooms">4.3. Chatrooms</h3>
+    <h4 id="4-3-1-public-chatrooms">4.3.1. Public chatrooms</h4>
+    <p>
+      Chatrooms let users organize conversation by topic or group. By default, rooms are public and can be joined by
+      anyone. Attempting to join a room that does not exist will create the room instead. If a room goes empty, it is
+      deleted after a grace period.
+    </p>
+    <h4 id="4-3-2-password-protected-chatrooms">4.3.2. Password-protected chatrooms</h4>
+    <p>
+      Password-protected chatrooms are rooms that require a password to enter. The password is set by the chatroom
+      owner. The security of such a room is questionable, as a password leak would let anyone access the room&#39;s
+      contents.
+    </p>
+    <h4 id="4-3-3-invite-only-chatrooms">4.3.3. Invite-only chatrooms</h4>
+    <p><em>To be implemented.</em></p>
+    <p>
+      Invite-only chatrooms allow chatroom owners to specify a list of users that are uniquely allowed to participate by
+      specifying their public Ethereum addresses (which are intrinsically tied to the users&#39; public/private
+      keypairs). End-to-end encryption is planned to be part of this feature although its practical feasiblity requires
+      further investigation.
+    </p>
+    <h3 id="4-4-direct-messages">4.4. Direct messages</h3>
+    <p><em>To be implemented.</em></p>
+    <p>
+      Direct messages are not yet available as they are expected to be private (i.e. end-to-end encrypted) and
+      asynchronous (a user can be messaged even if she is offline), two features which are due to be implemented at a
+      later point in time.
+    </p>
+  </body>
+</html>

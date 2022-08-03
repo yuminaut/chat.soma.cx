@@ -1,0 +1,94 @@
+/* @import url("./Inter/inter.css");
+html {
+  font-family: "Inter", sans-serif;
+}
+@supports (font-variation-settings: normal) {
+  html {
+    font-family: "Inter var", sans-serif;
+  }
+} */
+
+/* https://stackoverflow.com/questions/1664049/can-i-force-a-page-break-in-html-printing */
+
+body {
+  padding: 4em 1em 4em;
+  margin: 0 auto;
+  max-width: 640px;
+  font-family: Georgia, "Times New Roman", Times, serif;
+  /* font-family: Inter, sans-serif; */
+  line-height: 130%;
+  background: #fafafa;
+  color: #222;
+
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  -ms-word-break: break-all;
+  word-break: break-all;
+  word-break: break-word;
+}
+a {
+  color: darkblue;
+}
+
+h1 {
+  text-align: center;
+  font-size: 1.6em;
+  line-height: 130%;
+}
+
+h2 {
+  margin: 1em 0 0.5em;
+  padding-bottom: 0.25em;
+  font-size: 1.8em;
+  line-height: 130%;
+  border-bottom: 1px solid #ccc;
+}
+
+h3 {
+  font-size: 1.5em;
+  text-decoration: none;
+}
+
+h4 {
+  margin: 0;
+  font-size: 1.25em;
+}
+
+.info {
+  text-align: center;
+  margin-top: 1.5em;
+  padding: 0.5em 0;
+}
+
+li {
+  margin-bottom: 0.25em;
+}
+
+blockquote {
+  border-left: 4px solid #aaa;
+  padding-left: 1em;
+  margin: 0 1em;
+}
+
+/* Unused */
+
+img {
+  display: block;
+  width: 100%;
+  max-width: 500px;
+  margin: 2em auto;
+  padding: 0;
+}
+
+.abstract {
+  margin: 0 auto;
+  max-width: 360px;
+}
+
+.footnotes {
+  background: #eee;
+  list-style-type: none;
+  padding: 1em;
+  /* text-indent: -1.5em;
+    margin-left: 1.5em; */
+}

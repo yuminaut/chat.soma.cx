@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" media="print" href="style.css" />
+    <title>The SomaChat Key Exchange Protocol</title>
+  </head>
+  <body>
+    <h1 id="somachat-key-exchange">The SomaChat Key Exchange Protocol</h1>
+
+    <div class="info">
+      chat@soma.cx
+      <br />
+      <a href="https://soma.cx" rel="noopener noreferrer nofollow" target="_blank">www.soma.cx</a>
+      <br />
+      Jul 28, 2022
+    </div>
+
+    <h3 id="table-of-contents">Table of contents</h3>
+    <ul class="content">
+      <li><a href="#1-introduction">1. Introduction</a></li>
+      <li>
+        <a href="#2-preliminaries">2. Preliminaries</a>
+        <!-- <ul>
+          <li><a href="#2-1-notation">2.1. Notation</a></li>
+          <li><a href="#2-2-key-management">2.2. Key management</a></li>
+          <li><a href="#2-3-keys">2.3. Keys</a></li>
+        </ul> -->
+      </li>
+      <li>
+        <a href="#3-the-ske-protocol">3. The SKE protocol</a>
+        <!-- <ul>
+          <li>
+            <a href="#3-1-overview">3.1. Overview</a>
+            <ul>
+              <li><a href="#3-1-1-entities">3.1.1. Entities</a></li>
+              <li><a href="#3-1-2-steps">3.1.2. Steps</a></li>
+            </ul>
+          </li>
+          <li><a href="#3-2-joining-a-session">3.2. Joining a session</a></li>
+          <li><a href="#3-3-authentication">3.3. Authentication</a></li>
+          <li><a href="#3-4-agreeing-upon-a-shared-secret">3.4. Agreeing upon a shared secret</a></li>
+          <li><a href="#3-5-sending-messages">3.5. Sending messages</a></li>
+        </ul> -->
+      </li>
+      <li>
+        <a href="#4-security-considerations">4. Security considerations</a>
+        <!-- <ul>
+          <li><a href="#4-1-authentication">4.1. Authentication</a></li>
+          <li><a href="#4-2-replay-attacks">4.2. Replay attacks</a></li>
+          <li><a href="#4-3-deniability">4.3. Deniability</a></li>
+          <li><a href="#4-4-key-compromise">4.4. Key compromise</a></li>
+          <li><a href="#4-5-server-trust">4.5. Server trust</a></li>
+          <li><a href="#4-6-client-trust">4.6. Client trust</a></li>
+        </ul> -->
+      </li>
+      <li><a href="#5-acknowledgements">5. Acknowledgements</a></li>
+    </ul>
+
+    <h2 id="1-introduction">1. Introduction</h2>
+    <p>
+      This document describes SKE, the <em>SomaChat Key Exchange protocol</em>, which establishes a shared secret key
+      between two parties. SKE provides authentication and cryptographic deniability.
+    </p>
+    <p>SKE is designed to accomodate the limitations on private key management imposed by web browsers.</p>
+    <h2 id="2-preliminaries">2. Preliminaries</h2>
+    <h3 id="2-1-notation">2.1. Notation</h3>
+    <ul>
+      <li>
+        A keypair <em>x</em> is a pair of values (<em>x&#39;</em>, P(<em>x&#39;</em>)) such that P is an operation upon
+        <em>x&#39;</em> that is fast to compute but hard to reverse. <em>x&#39;</em> and P(<em>x&#39;</em>) represent
+        the private and public keys of a keypair <em>x</em>, respectively. In this document <em>x</em> is used to
+        interchangeably denote both the public key and the keypair as a whole, and <em>x&#39;</em> to only denote the
+        private key.
+      </li>
+      <li>
+        An address <em>a<sub>x</sub></em> is a memorable representation of the public key <em>x</em>.
+      </li>
+      <li>
+        <em>Sign<sub>x&#39;</sub></em
+        >(<em>M</em>) signs the message M with the private key <em>x&#39;</em> to produce a signature.
+      </li>
+      <li>
+        <em>Verify<sub>x</sub></em
+        >(<em>M</em>, <em>S</em>) checks whether the signature <em>S</em> was produced by signing the message
+        <em>M</em> with the private key <em>x&#39;</em>.
+      </li>
+      <li>
+        <em>DH</em>(<em>x&#39;</em>, <em>y</em>) computes the result of applying an ECDH function to a private key
+        <em>x&#39;</em> and a public key <em>y</em>. <em>DH</em> has the property that <em>DH</em>(<em>x&#39;</em>,
+        <em>y</em>) = <em>DH</em>(<em>y&#39;</em>, <em>x</em>), which lets two parties compute a shared secret from
+        their own private key and the other party&#39;s public key.
+      </li>
+      <li>
+        <em>HMAC<sub>k</sub></em
+        >(<em>M</em>) computes a HMAC using the symmetric key <em>k</em> and the message <em>M</em>.
+      </li>
+      <li>The concatenation of two values <em>X</em> and <em>Y</em> is denoted as <em>X</em> ║ <em>Y</em>.</li>
+    </ul>
+    <h3 id="2-2-key-management">2.2. Key management</h3>
+    <p>
+      Using a web browser as the interface for any kind of application that requires management of public and private
+      keys raises two issues:
+    </p>
+    <ol>
+      <li>How are keys persisted between browsing sessions?</li>
+      <li>How are keys kept safe from malicious browser code?</li>
+    </ol>
+    <p>
+      The first issue can be solved for instance by the utilization of cookies or other forms of browser storage, or by
+      offloading the responsibility of key storage to the user completely and having her re-enter keys every session.
+      The second issue is much larger; in general, the code served by a specific host should never be trusted with
+      secrets whose use extends beyond applications directly related to the host in question.
+    </p>
+    <p>
+      What is really needed is to have the keys managed by a <em>trusted third party</em> that only lets the client code
+      interact with the keys in accordance with specific rules. One such third party that enables restrictive key access
+      would be a <em>crypto wallet</em>.
+    </p>
+    <p>
+      Here follows an excerpt from <em>4.1.3. Crypto wallets for decentralized trustless authentication</em> of
+      <a href="whitepaper.html">SomaChat: an Experimental Real-Time Chat</a>:
+    </p>
+    <blockquote>
+      <p>
+        A crypto wallet, such as MetaMask, lets a user operating a web-based client manually sign [12] a piece of data
+        with a private key without the client ever gaining access to the private key itself, since the action of signing
+        the data is performed completely within the confines of the crypto wallet software; what this means is that a
+        malicious client cannot steal the private key as the only data to enter the crypto wallet is the data to be
+        signed and the only data to leave it is the data&#39;s cryptographic signature.
+      </p>
+      <p>
+        This makes a crypto-wallet-as-browser-extension a perfect candidate for web-based trustless authentication as it
+        enables a scheme wherein a participant signs a message once per session and is thereafter able to communicate in
+        an authenticated way according to the protocol implemented by the chat client.
+      </p>
+    </blockquote>
+    <p>
+      For the reasons stated above, the primary keypair used in this protocol will be one contained within and managed
+      by a crypto wallet.
+    </p>
+    <h3 id="2-3-keys">2.3. Keys</h3>
+    <p>Assuming two parties Alice and Bob, the following keys will be used:</p>
+    <ul>
+      <li>
+        <em>I<sub>A</sub></em> - Alice&#39;s identity keypair
+      </li>
+      <li>
+        <em>A<sub>A</sub></em> - Alice&#39;s authentication keypair
+      </li>
+      <li>
+        <em>S<sub>A</sub></em> - Alice&#39;s signing keypair
+      </li>
+      <li>
+        <em>I<sub>B</sub></em> - Bob&#39;s identity keypair
+      </li>
+      <li>
+        <em>A<sub>B</sub></em> - Bob&#39;s authentication keypair
+      </li>
+      <li>
+        <em>S<sub>B</sub></em> - Bob&#39;s signing keypair
+      </li>
+    </ul>
+    <p>Note:</p>
+    <ul>
+      <li>
+        The identity keypair is considered to be long-term and is reused between sessions. It is preferable managed by a
+        secure application that prevents malicious client-side code from accessing it.
+      </li>
+      <li>The authentication keypair and the signing keypair are generated anew each session.</li>
+    </ul>
+    <h2 id="3-the-ske-protocol">3. The SKE protocol</h2>
+    <p>
+      The SKE protocol performs a pairwise key exchange with each connected user. As the protocol does not depend on any
+      sort of group synchronization we will only consider two participants, Alice and Bob, in this section.
+    </p>
+    <h3 id="3-1-overview">3.1. Overview</h3>
+    <h4 id="3-1-1-entities">3.1.1. Entities</h4>
+    <p>The protocol involves three entities: two users and a server.</p>
+    <ol>
+      <li>
+        <p>
+          <strong>Alice</strong>, who wants to authenticate to Bob and establish a shared secret key with him so that
+          she can deniably supply him with her public signing key.
+        </p>
+      </li>
+      <li>
+        <p><strong>Bob</strong>, who wants to allow users like Alice to do the above.</p>
+      </li>
+      <li>
+        <p>
+          A <strong>server</strong>, which can relay messages between Alice and Bob, and store information about users
+          that can be retreived in order to perform the functions explained above.
+        </p>
+      </li>
+    </ol>
+    <h4 id="3-1-2-steps">3.1.2. Steps</h4>
+    <p>The protocol involves the following steps:</p>
+    <ul>
+      <li><strong>Joining a session:</strong> Alice connects to a server that Bob is already connected to.</li>
+      <li><strong>Authentication:</strong> Alice proves her identity to Bob, who verifies it.</li>
+      <li>
+        <strong>Agreeing upon a shared secret:</strong> Alice performs a Diffie-Hellman calculation to find the secret
+        she shares with Bob.
+      </li>
+      <li>
+        <strong>Sending messages:</strong> Alice starts commuinicated with Bob in a deniably authenticated fashion.
+        <em
+          >Note: while not explicitly part of the protocol, this step is included in order to show how the established
+          session keys may be used.</em
+        >
+      </li>
+    </ul>
+    <h3 id="3-2-joining-a-session">3.2. Joining a session</h3>
+    <p>
+      Upon joining a session, Alice generates <em>A<sub>A</sub></em> and <em>S<sub>A</sub></em
+      >, publishes them to the server, and sends them to Bob. She also fetches Bob&#39;s <em>A<sub>B</sub></em> and
+      <em>S<sub>B</sub></em> from the server.
+    </p>
+    <!-- <p><strong>TODO - If Bob is authenticated, he computes the shared keys at this point.</strong></p> -->
+    <p>Note that Alice is not yet authenticated at this point.</p>
+    <h3 id="3-3-authentication-and-key-verification">3.3. Authentication</h3>
+    <p>
+      First, Alice chooses a deadline <em>D</em> and then computes a signature by signing her public authentication key
+      with her private identity key by using her key management software:
+    </p>
+    <p>
+      &nbsp; &nbsp; <em>Sig</em> =
+      <em
+        >Sign<sub>I&#39;<sub>A</sub></sub></em
+      >(<em>A<sub>A</sub></em> ║ <em>D</em>)
+    </p>
+    <p>
+      Then, Alice publishes <em>Sig</em> and <em>D</em> to the server and sends them to Bob. If Bob is offline when
+      Alice publishes these values, he can fetch them from the server when he goes online later.
+    </p>
+    <p>
+      Upon receiving <em>Sig</em> and <em>D</em>, Bob checks that the deadline has not passed, and verifies that
+      <em>Sig</em> was indeed created by signing <em>A<sub>A</sub></em> ║ D with <em>I&#39;<sub>A</sub></em
+      >:
+    </p>
+    <p>
+      &nbsp; &nbsp;
+      <em
+        >Verify<sub>I<sub>A</sub></sub></em
+      >(<em>A<sub>A</sub></em> ║ <em>D</em>, <em>Sig</em>)
+    </p>
+    <p>
+      If the check passes, Bob knows that Alice, who owns <em>I<sub>A</sub></em
+      >, also owns <em>A<sub>A</sub></em
+      >.
+    </p>
+    <h3 id="3-4-agreeing-upon-a-shared-secret">3.4. Agreeing upon a shared secret</h3>
+    <p>
+      Upon receiving a confirmation message from Bob from the previous step, Alice calculates her pairwise shared key
+      with Bob by first computing a Diffie-Hellman value:
+    </p>
+    <p>
+      &nbsp; &nbsp; <em>c</em> = <em>DH</em>(<em>A&#39;<sub>A</sub></em
+      >, <em>A<sub>B</sub></em
+      >)<br />
+    </p>
+    <p>
+      She then computes an encryption key <em>k<sub>e</sub></em> and a MAC key <em>k<sub>m</sub></em> as follows:
+    </p>
+    <p>
+      &nbsp; &nbsp; <em>k<sub>e</sub></em> = <em>HMAC<sub>c</sub></em
+      >(&quot;somachat-enc&quot;)
+    </p>
+    <p>
+      &nbsp; &nbsp; <em>k<sub>m</sub></em> = <em>HMAC<sub>c</sub></em
+      >(&quot;somachat-mac&quot;)
+    </p>
+    <p>
+      Alice saves the shared encryption key <em>k<sub>e</sub></em> and the shared MAC key <em>k<sub>m</sub></em> for
+      later use. She encrypts-then-macs her public signing key <em>S<sub>A</sub></em> using <em>k<sub>e</sub></em> and
+      <em>k<sub>m</sub></em
+      >,
+    </p>
+    <p>
+      &nbsp; &nbsp; <em>s<sub>enc</sub></em> =
+      <em
+        >Enc<sub>k<sub>e</sub></sub></em
+      >(<em>S<sub>A</sub></em
+      >)
+    </p>
+    <p>
+      &nbsp; &nbsp; <em>s<sub>mac</sub></em> =
+      <em
+        >HMAC<sub>k<sub>m</sub></sub></em
+      >(<em>s<sub>enc</sub></em
+      >)
+    </p>
+    <p>
+      and thereafter sends <em>s<sub>enc</sub></em> and <em>s<sub>mac</sub></em> to Bob.
+    </p>
+    <!--
+    Alice saves the shared encryption key _k<sub>e</sub>_ and the shared MAC key _k<sub>m</sub>_ for later use. She encrypts-then-macs her public signing key _S<sub>A</sub>_ using _k<sub>e</sub>_ and _k<sub>m</sub>_,
+    
+    &nbsp; &nbsp; _s<sub>enc</sub>_ = _Enc<sub>k<sub>e</sub>_(_S<sub>A</sub>_ ║ _V<sub>A</sub>_ ║ _I<sub>A</sub>_ ║ _I<sub>B</sub>_), where _V<sub>A</sub>_ = _Sign_(_A<sub>A</sub>_ ║ _D_, _I'<sub>A</sub>_)
+    
+    &nbsp; &nbsp; _s<sub>mac</sub>_ = _HMAC_(_s<sub>enc</sub>_, _k<sub>m</sub>_)
+    
+    and thereafter sends Bob two bundles:
+    
+    - (IA, VA), used for verifying that IA owns AA
+    - (_s<sub>enc</sub>_, _s<sub>mac</sub>_)
+    -->
+    <p>
+      Upon receiving Alice&#39;s message, Bob computes the same shared keys unless he knows them from before, verifies
+      the integrity of <em>s<sub>enc</sub></em> with <em>s<sub>mac</sub></em> and decrypts <em>s<sub>enc</sub></em> in
+      order to learn the signing key Alice intends to use.
+    </p>
+    <p>
+      At this point Alice is authenticated to Bob, so Bob encrypts-then-macs a confirmation message containing
+      Alice&#39;s signing key and sends it to her, so that Alice can make sure that Bob knows her identity.
+    </p>
+    <h3 id="3-5-sending-messages">3.5. Sending messages</h3>
+    <p>
+      Bob now knows Alice&#39;s public signing key, so Alice can use her private signing key to sign messages to Bob. In
+      order to mitigate e.g. replay attacks by the server, she can include a nonce in her signed messages, or a deadline
+      in the form of a future timestamp as shown here:
+    </p>
+    <p>&nbsp; &nbsp; <em>Content</em> = &quot;Hello&quot; ║ <em>Timestamp</em></p>
+    <p>
+      &nbsp; &nbsp; <em>Signature</em> =
+      <em
+        >Sign<sub>S&#39;<sub>A</sub></sub></em
+      >(<em>Content</em>)
+    </p>
+    <p>&nbsp; &nbsp; <em>Message</em> = <em>Content</em> ║ <em>Signature</em></p>
+    <p>
+      Alice sends <em>Message</em> to Bob, who upon receiving it verifies its validity with <em>Verify</em
+      ><sub
+        ><em>S<sub>A</sub></em></sub
+      >(<em>Content</em>, <em>Signature</em>), and then checks that the deadline has not passed.
+    </p>
+    <h2 id="4-security-considerations">4. Security considerations</h2>
+    <h3 id="4-1-authentication">4.1. Authentication</h3>
+    <p>
+      If Alice wants Bob to be sure that her identity key <em>I<sub>A</sub></em> belongs to her, she may provide this
+      key to Bob over a separate authenticated channel. If she does not authenticate to Bob in this way, Bob is provided
+      no cryptographic guarantee of who the owner of <em>I<sub>A</sub></em> is.
+    </p>
+    <h3 id="4-2-replay-attacks">4.2. Replay attacks</h3>
+    <p>
+      A malicious or malfunctioning server can replay a message from Alice to Bob, and it will be accepted as legit. The
+      attack can be mitigated in at least two ways:
+    </p>
+    <ul>
+      <li>
+        Alice includes a deadline in each of her messages, and Bob discards a messages if its deadline has passed. The
+        deadline should be kept as tight as possible, but far enough into the future to give some leeway for slow
+        relaying of messages.
+      </li>
+      <li>
+        Alice includes a nonce (a <em><strong>n</strong>umber used <strong>once</strong></em
+        >) in each of her messages, incrementing it with each message sent, and Bob discards a message if the nonce is
+        strictly increasing with each message he receives from Alice.
+      </li>
+    </ul>
+    <h3 id="4-3-deniability">4.3. Deniability</h3>
+    <p>
+      Since Alice <em>symmetrically</em> encrypts her signing key (with her and Bob&#39;s shared secret) before sending
+      it to Bob, there is no way for him to prove afterward to a third party that he did not himself author the
+      encrypted message containing Alice&#39;s signing key, as he too knows the encryption key.
+    </p>
+    <!-- TODO - Figure out whether this is actually a problem -->
+    <!-- In a multi-user session however, since Alice uses the same signing key for every user in the session, a group of users could collude and gather "plausible proof" (though not cryptographic proof) that Alice indeed authored the messages received by them. Such an attack could be mitigated to some degree if Alice were to use a different signing key for each user she is talking to; however, that would require her to sign each message once for each intended recipient and would greatly increase resource usage both on Alice's end and server-side. -->
+    <h3 id="4-4-key-compromise">4.4. Key compromise</h3>
+    <p>
+      Regardless of key compromise, already-sent messages remain deniable due to fact that the key used for signing them
+      was exchanged with other users in a deniable fashion.
+    </p>
+    <p>
+      Compromise of identity keys would allows impersonation of a user and would require her to renounce those keys via
+      a separate authenticated channel.
+    </p>
+    <p>Compromise of authentication keys would allow impersonation only until their deadline has passed.</p>
+    <h3 id="4-5-server-trust">4.5. Server trust</h3>
+    <p>A malicious server could withhold or destroy messages sent between Alice and Bob.</p>
+    <p>
+      It could also attempt replay attacks, subject to the mitigation methods provided in section
+      <em>4.2. Replay attacks</em>.
+    </p>
+    <h3 id="4-6-client-trust">4.6. Client trust</h3>
+    <p>
+      A malicious client could impersonate an active user by stealing her authentication keys and signing keys. The
+      ability to impersonate the user ends after the authentication key&#39;s deadline has passed.
+    </p>
+    <p>
+      Regardless of client security, identity keys are protected from being stolen as they are managed by separate
+      software that never leaks private keys.
+    </p>
+    <h2 id="5-acknowledgements">5. Acknowledgements</h2>
+    <p>The following resources have proven helpful in the design and implementation of this protocol:</p>
+    <ul>
+      <li>
+        <a href="https://otr.cypherpunks.ca/otr-wpes.pdf">Off-the-Record Communication, or, Why Not To Use PGP</a>
+      </li>
+      <li>
+        <a href="https://www.cypherpunks.ca/~iang/pubs/impauth.pdf"
+          >Improved User Authentication in Off-The-Record Messaging</a
+        >
+      </li>
+      <li><a href="https://www.cypherpunks.ca/~iang/pubs/mpotr.pdf">Multi-party Off-the-Record Messaging</a></li>
+      <li>
+        <a href="https://dspace.lib.ntua.gr/xmlui/bitstream/handle/123456789/44116/main.pdf?sequence=1&amp;isAllowed=y"
+          >Implementation of a Multi-party Off-the-Record messaging protocol</a
+        >
+      </li>
+      <li><a href="https://signal.org/blog/simplifying-otr-deniability/">Simplifying OTR deniability.</a></li>
+      <li><a href="https://signal.org/docs/specifications/x3dh/">The X3DH Key Agreement Protocol</a></li>
+    </ul>
+  </body>
+</html>

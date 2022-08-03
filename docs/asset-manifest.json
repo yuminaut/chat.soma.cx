@@ -1,19 +1,23 @@
 {
   "files": {
-    "main.css": "/static/css/main.ddebe877.css",
-    "main.js": "/static/js/main.859e57a4.js",
+    "main.css": "/static/css/main.b6d4a7b8.css",
+    "main.js": "/static/js/main.2689a2e6.js",
     "static/js/27.db087d70.chunk.js": "/static/js/27.db087d70.chunk.js",
+    "static/media/Inconsolata.ttf": "/static/media/Inconsolata.1f56ee050cf1f63c7314.ttf",
+    "static/media/FiraCode.ttf": "/static/media/FiraCode.4938e54ab2f06530a084.ttf",
     "static/media/Simple-Line-Icons.svg?v=2.4.0": "/static/media/Simple-Line-Icons.809e55bbb1903c630920.svg",
     "static/media/Simple-Line-Icons.woff?v=2.4.0": "/static/media/Simple-Line-Icons.5c9febce52054ae0b96d.woff",
+    "static/media/eth.png": "/static/media/eth.23ca4a5fb8f08bd86897.png",
     "static/media/Simple-Line-Icons.eot?v=2.4.0": "/static/media/Simple-Line-Icons.85e8c542d5e137beecf9.eot",
     "static/media/Simple-Line-Icons.ttf?v=2.4.0": "/static/media/Simple-Line-Icons.3ec13a24af3fdda11107.ttf",
     "static/media/Avenir.ttf": "/static/media/Avenir.b58b1b9c574d4cabb0ab.ttf",
     "static/media/Simple-Line-Icons.woff2?v=2.4.0": "/static/media/Simple-Line-Icons.3826fa1cb2348dd93948.woff2",
+    "static/media/ens.png": "/static/media/ens.d164471b3bcec13e7d71.png",
     "static/media/ding.m4a": "/static/media/ding.9a3f31bd0a9331d8de5b.m4a",
     "index.html": "/index.html"
   },
   "entrypoints": [
-    "static/css/main.ddebe877.css",
-    "static/js/main.859e57a4.js"
+    "static/css/main.b6d4a7b8.css",
+    "static/js/main.2689a2e6.js"
   ]
 }

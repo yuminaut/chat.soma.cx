@@ -1,23 +1,34 @@
 {
   "files": {
-    "main.css": "/static/css/main.71734719.css",
+    "main.css": "/static/css/main.9ea30011.css",
     "main.js": "/static/js/main.a91f9f90.js",
     "static/js/27.db087d70.chunk.js": "/static/js/27.db087d70.chunk.js",
     "static/media/Inconsolata.ttf": "/static/media/Inconsolata.1f56ee050cf1f63c7314.ttf",
     "static/media/FiraCode.ttf": "/static/media/FiraCode.4938e54ab2f06530a084.ttf",
     "static/media/Simple-Line-Icons.svg?v=2.4.0": "/static/media/Simple-Line-Icons.809e55bbb1903c630920.svg",
+    "static/media/Avenir-BookOblique.ttf": "/static/media/Avenir-BookOblique.d87f1d4f06b83c5c9170.ttf",
+    "static/media/Avenir-Book.ttf": "/static/media/Avenir-Book.f3443d085a4785c7b05f.ttf",
+    "static/media/Avenir-Medium.ttf": "/static/media/Avenir-Medium.a11c4a4fed4a9555d79c.ttf",
+    "static/media/Avenir-Heavy.ttf": "/static/media/Avenir-Heavy.7bde675201d4c5ed7ea9.ttf",
+    "static/media/Avenir-MediumOblique.ttf": "/static/media/Avenir-MediumOblique.875ef4a199f668915597.ttf",
+    "static/media/Avenir-Roman.ttf": "/static/media/Avenir-Roman.0290d99c875172f839ca.ttf",
+    "static/media/Avenir-Black.ttf": "/static/media/Avenir-Black.be9ee6dd5a410a549288.ttf",
+    "static/media/Avenir-Light.ttf": "/static/media/Avenir-Light.e4e0f6eae494213803fc.ttf",
+    "static/media/Avenir-BlackOblique.ttf": "/static/media/Avenir-BlackOblique.e855e2dee76a69b16e56.ttf",
     "static/media/Simple-Line-Icons.woff?v=2.4.0": "/static/media/Simple-Line-Icons.5c9febce52054ae0b96d.woff",
+    "static/media/Avenir-LightOblique.ttf": "/static/media/Avenir-LightOblique.30a4875eed942ee38117.ttf",
+    "static/media/Avenir-Oblique.ttf": "/static/media/Avenir-Oblique.3b34d1639a29442d3f7a.ttf",
+    "static/media/Avenir-HeavyOblique.ttf": "/static/media/Avenir-HeavyOblique.2b3cd8b3b11fc66528ea.ttf",
     "static/media/eth.png": "/static/media/eth.23ca4a5fb8f08bd86897.png",
     "static/media/Simple-Line-Icons.eot?v=2.4.0": "/static/media/Simple-Line-Icons.85e8c542d5e137beecf9.eot",
     "static/media/Simple-Line-Icons.ttf?v=2.4.0": "/static/media/Simple-Line-Icons.3ec13a24af3fdda11107.ttf",
-    "static/media/Avenir.ttf": "/static/media/Avenir.b58b1b9c574d4cabb0ab.ttf",
     "static/media/Simple-Line-Icons.woff2?v=2.4.0": "/static/media/Simple-Line-Icons.3826fa1cb2348dd93948.woff2",
     "static/media/ens.png": "/static/media/ens.d164471b3bcec13e7d71.png",
     "static/media/ding.m4a": "/static/media/ding.9a3f31bd0a9331d8de5b.m4a",
     "index.html": "/index.html"
   },
   "entrypoints": [
-    "static/css/main.71734719.css",
+    "static/css/main.9ea30011.css",
     "static/js/main.a91f9f90.js"
   ]
 }

@@ -1,10 +1,14 @@
 {
   "files": {
-    "main.css": "/static/css/main.595c37f8.css",
-    "main.js": "/static/js/main.a6caab4f.js",
+    "main.css": "/static/css/main.f5d5ec4c.css",
+    "main.js": "/static/js/main.96f2112f.js",
     "static/js/27.db087d70.chunk.js": "/static/js/27.db087d70.chunk.js",
     "static/media/Inconsolata.ttf": "/static/media/Inconsolata.1f56ee050cf1f63c7314.ttf",
-    "static/media/FiraCode.ttf": "/static/media/FiraCode.4938e54ab2f06530a084.ttf",
+    "static/media/FiraCode-Bold.ttf": "/static/media/FiraCode-Bold.06506052e5335a624984.ttf",
+    "static/media/FiraCode-Regular.ttf": "/static/media/FiraCode-Regular.ea32261131becc79ea84.ttf",
+    "static/media/FiraCode-Light.ttf": "/static/media/FiraCode-Light.6f291ef94ec530c9c3dd.ttf",
+    "static/media/FiraCode-Retina.ttf": "/static/media/FiraCode-Retina.dd6e3adcaf8afc541477.ttf",
+    "static/media/FiraCode-Medium.ttf": "/static/media/FiraCode-Medium.1c8a3e40256226ddb520.ttf",
     "static/media/Simple-Line-Icons.svg?v=2.4.0": "/static/media/Simple-Line-Icons.809e55bbb1903c630920.svg",
     "static/media/Avenir-BookOblique.ttf": "/static/media/Avenir-BookOblique.d87f1d4f06b83c5c9170.ttf",
     "static/media/Avenir-Book.ttf": "/static/media/Avenir-Book.f3443d085a4785c7b05f.ttf",
@@ -28,7 +32,7 @@
     "index.html": "/index.html"
   },
   "entrypoints": [
-    "static/css/main.595c37f8.css",
-    "static/js/main.a6caab4f.js"
+    "static/css/main.f5d5ec4c.css",
+    "static/js/main.96f2112f.js"
   ]
 }

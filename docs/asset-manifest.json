@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/static/css/main.9917f77c.css",
-    "main.js": "/static/js/main.3575d996.js",
+    "main.css": "/static/css/main.ebca7df7.css",
+    "main.js": "/static/js/main.9652c519.js",
     "static/js/27.db087d70.chunk.js": "/static/js/27.db087d70.chunk.js",
     "static/media/Inconsolata.ttf": "/static/media/Inconsolata.1f56ee050cf1f63c7314.ttf",
     "static/media/FiraCode-Bold.ttf": "/static/media/FiraCode-Bold.06506052e5335a624984.ttf",
@@ -35,7 +35,7 @@
     "index.html": "/index.html"
   },
   "entrypoints": [
-    "static/css/main.9917f77c.css",
-    "static/js/main.3575d996.js"
+    "static/css/main.ebca7df7.css",
+    "static/js/main.9652c519.js"
   ]
 }

@@ -1,6 +1,6 @@
 {
   "files": {
-    "main.css": "/static/css/main.8bc06bb0.css",
+    "main.css": "/static/css/main.4ddc4419.css",
     "main.js": "/static/js/main.d16e2ca7.js",
     "static/js/27.db087d70.chunk.js": "/static/js/27.db087d70.chunk.js",
     "static/media/Inconsolata.ttf": "/static/media/Inconsolata.1f56ee050cf1f63c7314.ttf",
@@ -32,7 +32,7 @@
     "index.html": "/index.html"
   },
   "entrypoints": [
-    "static/css/main.8bc06bb0.css",
+    "static/css/main.4ddc4419.css",
     "static/js/main.d16e2ca7.js"
   ]
 }

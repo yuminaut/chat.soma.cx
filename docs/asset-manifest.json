@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/static/css/main.0a7e5250.css",
-    "main.js": "/static/js/main.a609a1b8.js",
+    "main.css": "/static/css/main.73e9ebc2.css",
+    "main.js": "/static/js/main.6f8195ef.js",
     "static/js/27.db087d70.chunk.js": "/static/js/27.db087d70.chunk.js",
     "static/media/Inconsolata.ttf": "/static/media/Inconsolata.1f56ee050cf1f63c7314.ttf",
     "static/media/FiraCode-Bold.ttf": "/static/media/FiraCode-Bold.06506052e5335a624984.ttf",
@@ -17,6 +17,7 @@
     "static/media/Avenir-MediumOblique.ttf": "/static/media/Avenir-MediumOblique.875ef4a199f668915597.ttf",
     "static/media/Avenir-Roman.ttf": "/static/media/Avenir-Roman.0290d99c875172f839ca.ttf",
     "static/media/Avenir-Black.ttf": "/static/media/Avenir-Black.be9ee6dd5a410a549288.ttf",
+    "static/media/fantom.png": "/static/media/fantom.40755d1e29ac5914081c.png",
     "static/media/Avenir-Light.ttf": "/static/media/Avenir-Light.e4e0f6eae494213803fc.ttf",
     "static/media/Avenir-BlackOblique.ttf": "/static/media/Avenir-BlackOblique.e855e2dee76a69b16e56.ttf",
     "static/media/Simple-Line-Icons.woff?v=2.4.0": "/static/media/Simple-Line-Icons.5c9febce52054ae0b96d.woff",
@@ -32,7 +33,7 @@
     "index.html": "/index.html"
   },
   "entrypoints": [
-    "static/css/main.0a7e5250.css",
-    "static/js/main.a609a1b8.js"
+    "static/css/main.73e9ebc2.css",
+    "static/js/main.6f8195ef.js"
   ]
 }
